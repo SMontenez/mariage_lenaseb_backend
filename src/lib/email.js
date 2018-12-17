@@ -29,6 +29,7 @@ async function send(fromName, fromEmail, toEmail, content) {
 
   const message = {
     from: fromEmail,
+    sender: fromEmail,
     to: toEmail,
     subject: `${EMAIL_SUBJECT_BASE} ${fromName}`,
     text: content,
