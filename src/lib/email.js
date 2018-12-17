@@ -8,13 +8,12 @@ const EMAIL_SUBJECT_BASE = 'Nouvelle question sur votre MARIAGE de';
  * Send an email to the toEmail address, with details about who wanted to send it: name and email
  *
  * @param {string} fromName  - name of the person who wanted to send the email
- * @param {string} fromEmail - email address of the person who wanted to send the email
  * @param {string} toEmail   - email address of the receiver
  * @param {string} content   - content of the email
  *
  * @returns {void}
  */
-async function send(fromName, fromEmail, toEmail, content) {
+async function send(fromName, toEmail, content) {
   const smtpConfig = {
     host: config.email.smtp.host,
     port: 465,
@@ -28,8 +27,6 @@ async function send(fromName, fromEmail, toEmail, content) {
   const transporter = nodemailer.createTransport(smtpConfig);
 
   const message = {
-    from: fromEmail,
-    sender: fromEmail,
     to: toEmail,
     subject: `${EMAIL_SUBJECT_BASE} ${fromName}`,
     text: content,

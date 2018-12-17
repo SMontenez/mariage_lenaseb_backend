@@ -15,7 +15,7 @@ const emailLib = require('../../lib/email');
 async function send(req, res) {
   const {
     error,
-    value: { name, senderEmail, content },
+    value: { name, content },
   } = Joi.validate(req.body, sendEmailSchema);
 
   if (error) {
@@ -26,7 +26,7 @@ async function send(req, res) {
 
   let result;
   try {
-    result = await emailLib.send(name, senderEmail, receiverAddress, content);
+    result = await emailLib.send(name, receiverAddress, content);
   } catch (err) {
     return res.status(500).json({ err });
   }
