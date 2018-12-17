@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "cp",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    },
+    "sourceType": "module"
+  },
+  "rules" : {
+    "metrics/metrics-documentation": 0,
+    "no-await-in-loop": 0
+  }
+}
