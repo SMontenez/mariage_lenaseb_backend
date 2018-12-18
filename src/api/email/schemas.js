@@ -1,10 +1,16 @@
 const Joi = require('joi');
 
 const sendEmailSchema = Joi.object().keys({
-  name: Joi.string()
+  lastname: Joi.string()
     .max(20)
     .required(),
-  content: Joi.string().required(),
+  firstname: Joi.string()
+    .max(20)
+    .required(),
+  email: Joi.string()
+    .email()
+    .required(),
+  message: Joi.string().required(),
 });
 
 module.exports = {

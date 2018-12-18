@@ -15,18 +15,19 @@ const emailLib = require('../../lib/email');
 async function send(req, res) {
   const {
     error,
-    value: { name, content },
+    value: { lastname, firstname, email: fromEmail, message },
   } = Joi.validate(req.body, sendEmailSchema);
 
   if (error) {
     return res.status(400).json({ err: error.name, details: error.details });
   }
 
-  const { receiverAddress } = config.email;
+  const name = `${firstname} ${lastname}`;
+  const { receiverAddress: toEmail } = config.email;
 
   let result;
   try {
-    result = await emailLib.send(name, receiverAddress, content);
+    result = await emailLib.send(name, fromEmail, toEmail, message);
   } catch (err) {
     return res.status(500).json({ err });
   }
