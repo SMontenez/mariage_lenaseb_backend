@@ -1,13 +1,12 @@
-const covoit = require('./covoit');
-const email = require('./email');
+const controllers = require('./controllers');
 
 const { Router: createRouter } = require('express');
 
 module.exports = function register() {
   const router = createRouter();
 
-  router.use('/covoit', covoit());
-  router.use('/email', email());
+  router.get('/:type', controllers.getByType);
+  router.post('/', controllers.create);
 
   return router;
 };

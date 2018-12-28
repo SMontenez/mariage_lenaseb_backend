@@ -8,31 +8,36 @@ const emailLib = require('../../lib/email');
 /**
  * Send an email to the receiver defined in config
  *
- * @param  {Object}   req  Express request
- * @param  {Object}   res  Express response
+ * @param  {Object} req  - Express request
+ * @param  {Object} res  - Express response
+ * @param  {Object} next - Express next handler
  * @returns {void}
  */
-async function send(req, res) {
-  const {
-    error,
-    value: { lastname, firstname, email: fromEmail, message },
-  } = Joi.validate(req.body, sendEmailSchema);
-
-  if (error) {
-    return res.status(400).json({ err: error.name, details: error.details });
-  }
-
-  const name = `${firstname} ${lastname}`;
-  const { receiverAddress: toEmail } = config.email;
-
-  let result;
+async function send(req, res, next) {
   try {
-    result = await emailLib.send(name, fromEmail, toEmail, message);
-  } catch (err) {
-    return res.status(500).json({ err });
-  }
+    const {
+      error,
+      value: { lastname, firstname, email: fromEmail, message },
+    } = Joi.validate(req.body, sendEmailSchema);
 
-  return res.status(200).json({ result });
+    if (error) {
+      return next(error);
+    }
+
+    const name = `${firstname} ${lastname}`;
+    const { receiverAddress: toEmail } = config.email;
+
+    let result;
+    try {
+      result = await emailLib.send(name, fromEmail, toEmail, message);
+    } catch (err) {
+      return next(err);
+    }
+
+    return res.status(200).json({ result });
+  } catch (err) {
+    return next(err);
+  }
 }
 
 module.exports = {
