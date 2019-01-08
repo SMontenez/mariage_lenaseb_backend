@@ -1,5 +1,5 @@
-const types = ['proposal', 'request'];
+const TYPES = Object.freeze(['proposal', 'request']);
 
-module.exports = {
-  types,
-};
+module.exports = Object.freeze({
+  TYPES,
+});

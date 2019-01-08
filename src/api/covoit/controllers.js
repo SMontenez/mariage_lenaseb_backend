@@ -3,7 +3,7 @@ const createError = require('http-errors');
 
 const { createSchema } = require('./schemas');
 
-const { types: ALLOWED_TYPES } = require('../../constants/covoit');
+const { TYPES } = require('../../constants/covoit');
 const covoit = require('../../models/covoit');
 
 const INVALID_TYPE_ERROR = new Error('Invalid covoit type requested');
@@ -20,7 +20,7 @@ async function getByType(req, res, next) {
   try {
     const { type } = req.params;
 
-    if (!ALLOWED_TYPES.includes(type)) {
+    if (!TYPES.includes(type)) {
       return next(createError(400, INVALID_TYPE_ERROR));
     }
 

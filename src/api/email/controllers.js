@@ -1,9 +1,13 @@
 const Joi = require('joi');
+const createError = require('http-errors');
 
-const { sendEmailSchema } = require('./schemas');
+const schemas = require('./schemas');
 
 const config = require('../../config');
+const { TYPES } = require('../../constants/email');
 const emailLib = require('../../lib/email');
+
+const INVALID_TYPE_ERROR = new Error('Invalid email type requested');
 
 /**
  * Send an email to the receiver defined in config
@@ -15,21 +19,22 @@ const emailLib = require('../../lib/email');
  */
 async function send(req, res, next) {
   try {
-    const {
-      error,
-      value: { lastname, firstname, email: fromEmail, message },
-    } = Joi.validate(req.body, sendEmailSchema);
+    const { type } = req.params;
+
+    if (!TYPES.includes(type)) {
+      return next(createError(400, INVALID_TYPE_ERROR));
+    }
+    const { error, value: emailPayload } = Joi.validate(req.body, schemas[type]);
 
     if (error) {
       return next(error);
     }
 
-    const name = `${firstname} ${lastname}`;
     const { receiverAddress: toEmail } = config.email;
 
     let result;
     try {
-      result = await emailLib.send(name, fromEmail, toEmail, message);
+      result = await emailLib.send(type, emailPayload, toEmail);
     } catch (err) {
       return next(err);
     }

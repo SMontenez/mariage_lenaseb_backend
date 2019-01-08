@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const sendEmailSchema = Joi.object().keys({
+const contactEmailSchema = Joi.object().keys({
   lastname: Joi.string()
     .max(20)
     .required(),
@@ -13,6 +13,20 @@ const sendEmailSchema = Joi.object().keys({
   message: Joi.string().required(),
 });
 
+const presenceEmailSchema = Joi.object().keys({
+  lastname: Joi.string()
+    .max(20)
+    .required(),
+  firstname: Joi.string()
+    .max(20)
+    .required(),
+  presence: Joi.boolean().required(),
+  message: Joi.string().empty(''),
+  nbAdults: Joi.number().default(0),
+  nbChildren: Joi.number().default(0),
+});
+
 module.exports = {
-  sendEmailSchema,
+  contact: contactEmailSchema,
+  presence: presenceEmailSchema,
 };

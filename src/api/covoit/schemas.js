@@ -1,12 +1,12 @@
 const Joi = require('joi');
 
-const { types: ALLOWED_TYPES } = require('../../constants/covoit');
+const { TYPES } = require('../../constants/covoit');
 
 const phoneRegex = /^0[1-8]\d{8}$/;
 
 const createSchema = Joi.object().keys({
   type: Joi.string()
-    .valid(ALLOWED_TYPES)
+    .valid(TYPES)
     .required(),
   firstname: Joi.string().required(),
   lastname: Joi.string().required(),
@@ -21,7 +21,7 @@ const createSchema = Joi.object().keys({
     .required(),
   contact: Joi.object()
     .keys({
-      téléphone: Joi.string()
+      phone: Joi.string()
         .regex(phoneRegex)
         .allow(''),
       email: Joi.string()
@@ -29,7 +29,7 @@ const createSchema = Joi.object().keys({
         .allow(''),
     })
     .required()
-    .or('téléphone', 'email'),
+    .or('phone', 'email'),
 });
 
 module.exports = {
